@@ -1,4 +1,4 @@
 * Projektkurs i ljudkonst och elektroakustisk musik
 ** Max/MSP och REAPER
 *** Lektioner
-+ [[./lektioner/01-intro-syntes-sampler.org][01 Intro]]
++ [[./lektioner/01/01-intro-syntes-sampler.org][01 Intro]]
