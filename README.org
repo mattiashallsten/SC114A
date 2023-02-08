@@ -1,4 +1,4 @@
 * Projektkurs i ljudkonst och elektroakustisk musik
 ** Max/MSP och REAPER
 *** Lektioner
-+ [[https://github.com/mattiashallsten/SC114A/blob/master/lektioner/01-intro-syntes-sampler.org][01]]
++ [[https://github.com/mattiashallsten/SC114A/blob/master/lektioner/01-intro-syntes-sampler.org][01 Intro]]

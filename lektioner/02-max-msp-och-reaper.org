@@ -1,0 +1,14 @@
+* 02 Max MSP och REAPER :toc_4:
+  - [[#midi-styrning][MIDI-styrning]]
+  - [[#poly-och-poly][=[poly]= och =[poly~]=]]
+  - [[#reaper][REAPER]]
+  - [[#midi-reaper---max][MIDI REAPER -> Max]]
+  - [[#midi-max---reaper][MIDI Max -> REAPER]]
+
+** MIDI-styrning
++ =[midiin]=
++ =[midiparse]=
+** =[poly]= och =[poly~]=
+** REAPER
+** MIDI REAPER -> Max
+** MIDI Max -> REAPER
