@@ -2,8 +2,6 @@
   - [[#vad-är-maxmsp][Vad är Max/MSP?]]
   - [[#vad-är-ett-objekt][Vad är ett objekt?]]
   - [[#göra-ljud-i-maxmsp][Göra ljud i Max/MSP]]
-  - [[#bygg-en-subtraktiv-synt][Bygg en subtraktiv synt]]
-  - [[#sampler][Sampler]]
 
 ** Vad är Max/MSP?
 Max/MSP är en programmeringsmiljö för att arbeta med ljud, MIDI och
@@ -85,7 +83,7 @@ Alla objekt som gör ljud i Max/MSP har en tilde-symbol (~) som
 suffix. Till skillnad från andra objekt skickar dessa ut "signaler",
 vilket man ser på att den virtuella patchkabelns är randig.
 
-** Bygg en subtraktiv synt
+*** Bygg en subtraktiv synt
 + =[saw~]= :: genererar en sågtandsvåg
 + =[cycle~]= :: genererar en sinuston
 + =[lores~]= :: ett resonant lågpassfilter
@@ -117,7 +115,7 @@ alltså patchas till allt. Då avänder vi objektet =[line~]=, dit vi
 skickar listor i formatet =[value time]= -- vill vi t.ex att =[line~]=
 ska gå till 1 på 100 millisekunder skickar vi listan =[1 100]=.
 
-** Sampler
+*** Sampler
 + =[buffer~]= :: en namngiven plats där en ljudfil kan sparas
 + =[groove~]= :: en sample-uppspelare
 + =[play~]= :: en sample-uppspelare
@@ -148,7 +146,7 @@ använda objektet =[waveform~]= -- genom att skicka meddelandet =(set
 <name-of-buffer>)= till ett =[waveform~]=-objekt så visas innehållet
 av den angivna =[buffer~]= i =[wavform~]=-objektet.
 
-*** =[groove~]=
+**** =[groove~]=
 Objektet =[groove~]= är ett av de lättaste sätten att spela upp en
 ljudfil i Max/MSP. Objektet förväntar sig en *signal* som avgör dess
 uppspelningshastighet (default är 0, alltså ingen uppspelning alls),
@@ -167,7 +165,7 @@ Inlet 2 och 3 är loop start respektive loop end -- det går därför lätt
 att koppla in =[groove~]= i =[waveform]= där man då grafiskt kan
 bestämma vad som ska loopas.
 
-*** =[play~]=
+**** =[play~]=
 =[play~]= ger användaren lite mer kontroll över
 uppspelningen. Istället för att skicka meddelanden för att starta resp
 stoppa uppspelningen, skickar man en signal som bestämmer en position
