@@ -1,0 +1,171 @@
+* Lektion 01: Intro
+** Vad är Max/MSP?
+Max/MSP är en programmeringsmiljö för att arbeta med ljud, MIDI och
+video. Första versionen av programmet skapades under andra halvan av
+80-talet av tonsättaren och utvecklaren [[https://en.wikipedia.org/wiki/Miller_Puckette][Miller Puckette]] (programmet
+kallades då "The Patcher") och programmet har sedan 90-talet varit
+tätt kopplat till institutionen [[https://en.wikipedia.org/wiki/IRCAM][IRCAM]] i Paris.
+
+I Max/MSP skapar användaren en "patch" vars syfte kan vara att
+generera och/eller manipulera ljud, data eller video, men programmet
+är väldigt öppet och det går i stort sett att använda som ett
+generellt datorverktyg (liksom andra programmeringsspråk).
+
+Till skillnad från många andra programmeringsspråk/-miljöer är Max/MSP
+grafiskt. I en patch kopplar användaren ihop flertalet objekt med
+virtuella patchkablar, likt en modulärsynt.
+
+** Vad är ett objekt?
+Ett objekt är byggstenarna för en Max/MSP-patch. Jämför man med andra
+programmeringsspråk kan man se dem som förbyggda funktioner (eller
+rena objekt i OOP).
+
+Objekt i Max/MSP har vanligtvis en eller flera ingångar och en eller
+flera utgångar. Ingångarna är alltid ovantill och utgångarna
+nedantill, vilket gör att patchar vanligtvis går nedåt.
+
+För att skapa ett objekt i Max/MSP trycker användaren på "n"-tangenten
+och skriver sedan namnet på objektet. Användaren kan också välja att
+fylla i ett eller flera argument - för "+"-objektet kan användaren
+exempelvis fylla i vilket tal som ska adderas till den vänstra
+ingången.
+
+När vi skapar ett objekt och börjar skriva något så dyker ett
+popup-fönster upp med förslag på vad Max tror att vi vill skriva. I
+detta fall kommer förslaget "+" högst upp, och det är objektet vi vill
+åt. Trycker vi sedan mellanslag så förändras popup-fönstret och visar
+istället objektets argument -- dessa kan man se som objektets
+inställningar. I "+"-objektets fall så kan vi här ange dess initiella
+värde.
+
++ skapa objekt
++ flytta muspekare över inlets
+  + vad står det?
+  + vad betyder röd/blå?
++ flytta över outlet
+
++ demonstrera med hjälp av number-objekt
+  + förklara skillnad mellan integer och float (heltal / decimaltal)
+
++ koppla samman
+
++ genomför addition - visa på hur man stänger en patch (cmd + e)
+
++ visa skillnad på hot/cold inlet
+
+
+Från manualen:
+
+#+begin_quote
+Object boxes are the basic logic element of Max – they contain
+functions that perform some sort of task, and operate like miniature
+programs within the larger environment.
+#+end_quote
+** Datatyper i Max/MSP
++ bang :: en av de viktigaste datatyperna inom Max/MSP. De allra
+  flesta objekt tolkar en bang genom att genomföra sin
+  "huvuduppgift" - skickar man bang till en messagebox så skickas
+  meddelandet; skickar man en bang till ett "f"-objekt skickas talet
+  som är sparat i objektet.
++ heltal :: representeras visuellt med ett "number"-objekt.
++ flyttal :: representeras visuellt med ett "number"-objekt.
++ symbol :: text i en messagebox
++ lista :: en samling data, kan representeras i en messagebox
++ signal :: ljud
+
+** Göra ljud i Max/MSP
+Alla objekt som gör ljud i Max/MSP har en tilde-symbol (~) som
+suffix. Till skillnad från andra objekt skickar dessa ut "signaler",
+vilket man ser på att den virtuella patchkabelns är randig.
+
+** Bygg en subtraktiv synt
++ =[saw~]= :: genererar en sågtandsvåg
++ =[cycle~]= :: genererar en sinuston
++ =[lores~]= :: ett resonant lågpassfilter
++ =[*~]= :: multiplicera två inkommande signaler med varandra
++ =[line~]= :: skicka en lista till detta objekt för att generera ett
+  envelope.
++ =[live.gain~]= :: en volymkontroll
++ =[kslider]= :: ett virtuellt keyboard
++ =[mtof]= :: konvertera toner uttryckta i midi note number till Hz
+  
+Subtraktiv syntes är nog den vanligaste formen av syntes. Jag tror
+också att det är den syntesmetod som är enklast att förstå.
+
+Subtraktiv syntes går ut på att man har en ljudkälla med rik
+klangfärg. Det lättaste sättet att uppnå detta är med en sågtandsvåg,
+som har alla övertoner. I Max finns objektet =[saw~]=, som genererar
+en sågtandsvåg. Den första inlet i =[saw~]= är dess frekvens, och den
+första outlet är signalen. Ett enkelt filter i Max är =[lores~]=, ett
+enkelt resonant lågpassfilter (i still med Moog). Där kan vi ställa
+cutoff-frekvens och resonans. Sedan patchar vi in i ett
+multiplikationsobjekt (=[*~ 1.]=) för att kunna styra volym. Sedan in
+i =[live.gain~]= för att kunna ställa en mastervolym, och slutligen in
+i =[dac~]=.
+
+Nu hör vi ljud, men vi vill kunna styra ljudet utan att behöva använda
+mus och tangentbord. Detta kan vi göra med envelopes och lfo, där båda
+egentligen bara är funktioner för att generera en signal. Allt kan
+alltså patchas till allt. Då avänder vi objektet =[line~]=, dit vi
+skickar listor i formatet =[value time]= -- vill vi t.ex att =[line~]=
+ska gå till 1 på 100 millisekunder skickar vi listan =[1 100]=.
+
+** Sampler
++ =[buffer~]= :: en namngiven plats där en ljudfil kan sparas
++ =[groove~]= :: en sample-uppspelare
++ =[play~]= :: en sample-uppspelare
++ =[waveform~]= :: visualisera innehållet i en =[buffer~]=
+
+I Max/MSP representeras en ljudfil av en =[buffer~]= -- vi kan
+antingen välja att ladda in en existerande ljudfil, eller definera en
+längd för en given =[buffer~]= och spela in ljud dit inuti Max. Ett
+=[buffer~]=-objekt behöver ett godtyckligt namn, vilket anges som dess
+första argument. Detta namn kommer sedan att användas för att hänvisa
+till denna =[buffer~]=.
+
+För att ladda in en ljudfil i en =[buffer~]= skickar vi antingen
+meddelandet =(read)= eller =(replace)= -- skillnaden är att
+=(replace)= återställer alla inställningar för buffern. Anger vi inga
+argument till dessa meddelanden så öppnas ett popup-fönster (Finder
+för MacOS) där vi kan välja en ljudfil. Om vi har sparat vår Max-patch
+någonstans och lägger en ljudfil i samma mapp kan vi ange den filens
+namn som argument till både =(read)= och =(replace)= -- har vi t.ex
+filen =file.wav= kan vi skicka meddelandet =(read file.wav)= till en
+=[buffer~]=.
+
+Genom att dubbelklicka på ett =[buffer~]=-objekt när Max är i låst
+läge öppnas ett fönster som visar vågformen av =[buffer~]=-objektets
+innehåll. På så sätt kan vi säkerställa att ljudfilen laddades in
+korrekt. Om vi vill visa en liknande vågform i själva patchen kan vi
+använda objektet =[waveform~]= -- genom att skicka meddelandet =(set
+<name-of-buffer>)= till ett =[waveform~]=-objekt så visas innehållet
+av den angivna =[buffer~]= i =[wavform~]=-objektet.
+
+*** =[groove~]=
+Objektet =[groove~]= är ett av de lättaste sätten att spela upp en
+ljudfil i Max/MSP. Objektet förväntar sig en *signal* som avgör dess
+uppspelningshastighet (default är 0, alltså ingen uppspelning alls),
+och skickar man ett heltal hoppar till den positionen i
+buffern. Skickar man t.ex signalen 1 så spelas ljudfilen upp i normal
+hastighet - skickar man 2 dubbel hastighet, 0.5 halva hastigheten
+etc. Skickar man heltalet 0 så hoppar uppspelningen tillbaka till
+början, och skickar man heltalet 500 hoppar uppspelningen till 500 ms
+in i ljudfilen.
+
+=[groove~]= har dessutom en hel del inbyggda funktioner, framförallt
+gällande timestretch. Det går alltså att spela upp en ljudfil och
+styra tonhöjd och uppspelningshastighet separat.
+
+Inlet 2 och 3 är loop start respektive loop end -- det går därför lätt
+att koppla in =[groove~]= i =[waveform]= där man då grafiskt kan
+bestämma vad som ska loopas.
+
+*** =[play~]=
+=[play~]= ger användaren lite mer kontroll över
+uppspelningen. Istället för att skicka meddelanden för att starta resp
+stoppa uppspelningen, skickar man en signal som bestämmer en position
+i buffern att spela upp. Skickar man t.ex en ramp från 0 till 1000
+kommer =[play~]= att spela upp buffern från början till 1 sekund in i
+buffern. Detta gör att man kan experimentera men alternativa sätt att
+hitta ett index i buffern: man kan t.ex koppla in en oscillator eller
+slumpgenerator som hoppar till olika positioner.
