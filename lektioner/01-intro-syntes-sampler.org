@@ -1,4 +1,10 @@
-* Lektion 01: Intro
+* Lektion 01: Intro :toc:
+  - [[#vad-är-maxmsp][Vad är Max/MSP?]]
+  - [[#vad-är-ett-objekt][Vad är ett objekt?]]
+  - [[#göra-ljud-i-maxmsp][Göra ljud i Max/MSP]]
+  - [[#bygg-en-subtraktiv-synt][Bygg en subtraktiv synt]]
+  - [[#sampler][Sampler]]
+
 ** Vad är Max/MSP?
 Max/MSP är en programmeringsmiljö för att arbeta med ljud, MIDI och
 video. Första versionen av programmet skapades under andra halvan av
@@ -61,17 +67,18 @@ Object boxes are the basic logic element of Max – they contain
 functions that perform some sort of task, and operate like miniature
 programs within the larger environment.
 #+end_quote
-** Datatyper i Max/MSP
-+ bang :: en av de viktigaste datatyperna inom Max/MSP. De allra
-  flesta objekt tolkar en bang genom att genomföra sin
-  "huvuduppgift" - skickar man bang till en messagebox så skickas
-  meddelandet; skickar man en bang till ett "f"-objekt skickas talet
-  som är sparat i objektet.
-+ heltal :: representeras visuellt med ett "number"-objekt.
-+ flyttal :: representeras visuellt med ett "number"-objekt.
-+ symbol :: text i en messagebox
-+ lista :: en samling data, kan representeras i en messagebox
-+ signal :: ljud
+
+# ** Datatyper i Max/MSP
+# + bang :: en av de viktigaste datatyperna inom Max/MSP. De allra
+#   flesta objekt tolkar en bang genom att genomföra sin
+#   "huvuduppgift" - skickar man bang till en messagebox så skickas
+#   meddelandet; skickar man en bang till ett "f"-objekt skickas talet
+#   som är sparat i objektet.
+# + heltal :: representeras visuellt med ett "number"-objekt.
+# + flyttal :: representeras visuellt med ett "number"-objekt.
+# + symbol :: text i en messagebox
+# + lista :: en samling data, kan representeras i en messagebox
+# + signal :: ljud
 
 ** Göra ljud i Max/MSP
 Alla objekt som gör ljud i Max/MSP har en tilde-symbol (~) som
