@@ -4,8 +4,8 @@
   - [[#göra-ljud-i-maxmsp][Göra ljud i Max/MSP]]
     - [[#bygg-en-subtraktiv-synt][Bygg en subtraktiv synt]]
     - [[#sampler][Sampler]]
-      - [[#groove][=[groove~]=]]
-      - [[#play][=[play~]=]]
+      - [[#groove][groove~]]
+      - [[#play][play~]]
 
 ** Vad är Max/MSP?
 Max/MSP är en programmeringsmiljö för att arbeta med ljud, MIDI och
