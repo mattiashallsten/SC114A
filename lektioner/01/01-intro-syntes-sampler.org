@@ -124,6 +124,7 @@ ska gå till 1 på 100 millisekunder skickar vi listan =[1 100]=.
 + =[groove~]= :: en sample-uppspelare
 + =[play~]= :: en sample-uppspelare
 + =[waveform~]= :: visualisera innehållet i en =[buffer~]=
++ =[sig~]= :: konvertera ett tal till en signal
 
 I Max/MSP representeras en ljudfil av en =[buffer~]= -- vi kan
 antingen välja att ladda in en existerande ljudfil, eller definera en
@@ -150,7 +151,7 @@ använda objektet =[waveform~]= -- genom att skicka meddelandet =(set
 <name-of-buffer>)= till ett =[waveform~]=-objekt så visas innehållet
 av den angivna =[buffer~]= i =[wavform~]=-objektet.
 
-**** =[groove~]=
+**** groove~
 Objektet =[groove~]= är ett av de lättaste sätten att spela upp en
 ljudfil i Max/MSP. Objektet förväntar sig en *signal* som avgör dess
 uppspelningshastighet (default är 0, alltså ingen uppspelning alls),
@@ -169,7 +170,36 @@ Inlet 2 och 3 är loop start respektive loop end -- det går därför lätt
 att koppla in =[groove~]= i =[waveform]= där man då grafiskt kan
 bestämma vad som ska loopas.
 
-**** =[play~]=
++ skapa en buffer
+  + namnge
+  + använd meddelandet =read= för att ladda in en ljudfil
+
++ skapa =[waveform~]=
+  + meddelande =set= för att koppla den till buffern
+
++ skapa =[groove~]=
+
++ koppla till output
+
++ skicka signal 1
+
++ skicka talet 0
+
++ =setmode 1=
+  + patcha ihop med =[waveform~]=
+  + markera en range i buffer
+
++ selection start (ms)
+  + skapa =[i]=-objekt
+  + starta därifrån istället
+
++ visa =loop 1=
+  + demonstrera =$1=
+
++ patcha in selection start/end in i =[groove~]=
+
+**** play~
+
 =[play~]= ger användaren lite mer kontroll över
 uppspelningen. Istället för att skicka meddelanden för att starta resp
 stoppa uppspelningen, skickar man en signal som bestämmer en position
@@ -178,3 +208,11 @@ kommer =[play~]= att spela upp buffern från början till 1 sekund in i
 buffern. Detta gör att man kan experimentera men alternativa sätt att
 hitta ett index i buffern: man kan t.ex koppla in en oscillator eller
 slumpgenerator som hoppar till olika positioner.
+
+1. skapa =[play~]=
+2. koppla till output
+3. skicka =[line~]=
+   1. meddelande =(0, 1000 1000)=
+4. koppla in =[cycle~]=
+   1. använd =[scale~]= för att ställa loop points
+5. koppla in andra oscillatorer med =[selector~]=
