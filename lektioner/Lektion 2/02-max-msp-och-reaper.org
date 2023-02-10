@@ -1,0 +1,200 @@
+* Lektion 2                                                           :toc_4:
+  - [[#utveckling-av-vår-sampler][Utveckling av vår sampler]]
+    - [[#ladda-parametrar][Ladda parametrar]]
+    - [[#ladda-ljudfil-automatiskt][Ladda ljudfil automatiskt]]
+    - [[#ladda-fler-ljudfiler-byt-mellan-dessa][Ladda fler ljudfiler, byt mellan dessa]]
+  - [[#utveckling-av-vår-synt][Utveckling av vår synt]]
+    - [[#midi-styrning][MIDI-styrning]]
+      - [[#problem-med-midi-in][Problem med MIDI in]]
+      - [[#objektet-poly][Objektet poly]]
+    - [[#gör-synten-polyfon][Gör synten polyfon]]
+  - [[#reaper][REAPER]]
+  - [[#midi-reaper---max][MIDI REAPER -> Max]]
+  - [[#blackhole][BlackHole]]
+  - [[#midi-max---reaper][MIDI Max -> REAPER]]
+
+** Utveckling av vår sampler
+*** Ladda parametrar
++ =[loadbang]= :: skickar en bang när patchen öppnas
++ =[loadmess]= :: skickar ett värde när patchen öppnas
+
+Med dessa två objekt kan vi se till att vissa meddelanden skickas när
+patchen öppnas -- vill vi t.ex säkerställa att en number box har ett
+värdet =500= när patchen öppnas kan vi koppla objektet =[loadmess
+500]= in i number boxen.
+
+*** Ladda ljudfil automatiskt
+Vi har tills nu använt meddelandet =(replace)= för att ladda in en
+ljudfil i en =[buffer~]=. När meddelandet skickas så öppnas ett
+Finder-fönster (på MacOS) där vi kan välja ljudfil. Om vi däremot vill
+ladda en specifik ljudfil, utan att behöva välja den manuellt, kan vi
+ange ett filnamn som argument till =(replace)=.
+
+Som exempel har jag ljudfilen =smack.wav= -- skickar vi meddelandet
+=(replace smack.wav)= till =[buffer~]= kommer Max att söka efter filen
+=smack.wav= och om Max hittar den ladda in den i vår
+=[buffer~]=. Kopplar vi objektet =[loadbang]= till detta meddelande så
+kommer meddelandet att skickas till vår =[buffer~]= varje gång patchen
+öppnas, och vi kan vara säkra på att vi laddar vår ljudfil.
+
+*OBS*: För att Max ska hitta ljudfilen är det säkrast att spara
+ljudfilen i samma mapp som vår maxpatch.
+
+*** Ladda fler ljudfiler, byt mellan dessa
++ =[sel]= :: skicka ut en bang om ett valt värde skickas till
+  objektets första inlet
+
+När vi skapar objektet =[groove~]= behöver vi ange ett namn på en
+=[buffer~]= som vi vill att =[groove~]= ska spela upp. Vill vi ändra
+denna buffer kan vi skicka meddelandet =(name <namn-på-buffer>)= till
+=[groove~]=.
+
+Under lektionen skapade vi tre ytterligare buffers. Vi gav dem namnen
+=kick=, =snare= och =hh= och laddade in en sampling av en bastrumma,
+virveltrumma respektive hi-hat. Därefter kan vi skicka meddelandet
+=(name kick)= till =[groove~]= för att spela upp kick-samplingen,
+=(name snare)= för att spela upp virvelsamplingen osv.
+
+Om vi automatiskt vill slumpvis välja mellan dessa samplingar kan vi
+använda objektet =[random 3]= för att generera talen =0=, =1= eller
+=2=. Vi kan sedan koppla in =[random 3]= i =[sel 0 1 2]= för att
+skicka en bang till dess första, andra eller tredje outlet när värdena
+=0=, =1= respektive =2= skapas av =[random 3]=. Om vi sedan koppla
+dessa outlets till meddelandena =(name kick)=, =(name snare)=
+respektive =(name hh)= och kopplar dessa till vår =[groove~]= kommer
+talet =0= göra att =[groove~]= spelar upp vår kicksampling, talet =1=
+göra att =[groove~]= spelar upp vår snaresampling och talet =2= göra
+att vi spelar upp vår hi-hatsampling.
+
+Kopplar vi en =[metro]= till =[random 3]= kommer detta ske
+automatiskt.
+
+** Utveckling av vår synt
+*** MIDI-styrning
++ =[midiin]= :: få in rå MIDI-data
++ =[midiparse]= :: tolka det råa MIDI-datat och ge användaren tillgång
+  till note on/note off, control change, etc.
+
+Om vi vill styra Max med antingen extern hårdvara eller andra
+datorprogram kan vi använda [[https://en.wikipedia.org/wiki/MIDI][MIDI]]. För att få in MIDI-data i Max kan vi
+använda objektet =[midiin]=, där vi kan välja vilken MIDI-enhet vi
+vill lyssna på genom att dubbelklicka på objektet i låst läge.
+
+=[midiin]= skickar ut s.k "rå" MIDI-data, vilket vi måste tolka om för
+att kunna använda i Max. Vi kopplar därför outletten från =[midiin]=
+till objektet =[midiparse]=. =[midiparse]= har flertalet outlets som
+skickar ut olika typer av MIDI-data -- t.ex note on/note off, control
+change, program change, pitch bend. Vi vill åt note on/note off, den
+första outletten i =[midiparse]=.
+
+Det data som kommer ut ur =[midiparse]= är en lista med två element:
+note number och velocity. Note number är den tanget som spelas och
+velocity är hur vårt anslag -- trycker vi hårdare blir det ett högre
+värde och trycker vi svagare blir det ett lägre värde.
+
+För att få ut dessa värden enskild kan vi använda objektet =[unpack]=,
+som har motsatt effekt från =[pack]= -- vi anger vilket data vi vill
+få ut och =[unpack]= delar upp listan åt oss. I detta fall skriver vi
+=[unpack i i]=, för att separera de två heltalen note number och
+velocity from varandra. Vi kan därefter koppla in note number (den
+vänstra outletten av =[unpack]=) in i =[mtof]= och slutligen in i en
+oscillator.
+
+Det andra elementet i listan, som kommer ut ur den högra outletten i
+=[unpack]=, är velocity och är ett heltal mellan =0= och =127=. Det
+lättaste sättet att använda det för ett envelop är att göra så att Max
+känner igen alla tal som är =0= och alla tal som inte är =0= (d.v.s
+alla tal /över/ =0=). Vi kan sedan konvertera alla tal som är =0= till
+en bang, alla tal som inte är =0= till en annan bang.
+
+Vi uppnår detta genom att använda objektet =[sel 0]=. Kopplar vi in
+velocity till =[sel 0]= kommer alla värden som är =0= generera en bang
+i objektets vänstra outlet, och alla andra värden skickas till dess
+högra outlet. Vi kan sedan koppla dess högra outlet till ett
+=[button]=-objekt för att konvertera det till en bang.
+
+Vi kopplar sedan den bang som genereras av talet =0= till meddelandet
+=(0)=, vilket helt enkelt skickar talet =0= när det får en bang, och
+den andra bang till meddelandet =(1)=, vilket skickar talet =1=. Dessa
+tvåv värden kan sedan kopplas in i objektet =[adsr~]=, vilket är ett
+envelop som förväntar sig att få antingen värdet =0= (för att stänga
+envelopet) eller värdet =(1)= (för att öppna envelopet. Vi ersätter
+slutligen vår tidigare =[line~]= med detta =[adsr~]=, där vi kan
+ställa parameterna =attack=, =decay=, =sustain= och =release=.
+
+Vi har nu en synt som spelar den ton som vi spelar på vårt MIDI
+keyboard, och slutar spela när vi släpper tangenten.
+
+**** Problem med MIDI in
+Här uppstår dock ett problem -- eftersom vi har en monosynt kommer
+/alla/ velocityvärden som är 0 styra volymen. Om vi t.ex håller ner en
+ton, trycker och håller ner en till ton, och sedan släpper den första
+tonen kommer det göra så att envelopet stängs, även fast vi
+fortfarande håller ner den andra tonen. Detta kan vi lösa genom att
+göra om synten så att den blir polyfon.
+
+**** Objektet poly
+Objektet =[poly]= används för att allokera inkommande note on/note
+off-meddelanden till ett givet antal röster. Objektet håller alltså
+koll på vilken ton som hålls ner och vilken ton som lyfts upp, vilket
+vi inte kunde göra tidigare.
+
+Det lättaste sättet att använda =[poly]= nu är att, kanske lite
+motsägelsefullt, använda objektet för att skapa en mono-synt. Om vi
+anger antal röster att vara 1 och sätter på /voice stealing/ för
+=[poly]= kommer objektet sköta allt åt oss. Vi gör detta genom att ge
+=[poly]= argumenten =1= (antal röster) och =1= (voice stealing är på).
+
+=[poly]= förväntar sig antingen note number i dess vänstra inlet och
+velocity i dess högra inlet, /eller/ en lista bestående av note number
+och velocity i dess vänstra inlet -- vi kan alltså hoppa över vår
+=[unpack i i]= och koppla outlet 1 från =[midiparse]= direkt till
+=[poly]=. =[poly]= skickar därefter ut voice number i dess första
+outlet, vilket vi inte behöver bry oss om för tillfället då synten
+fortfarande är monofon. Ur outlet 2 och 3 kommer note number
+respektive velocity, vilket vi helt enkelt kopplar direkt till
+=[mtof]= respektive =[sel 0]= som tidigare.
+
+Det går nu att spela vår synt legato, utan att riskera att den stängs
+av när vi inte vill.
+
+*** Gör synten polyfon
++ =[route]= :: skicka olika tal till olika outlet beroende på dess
+  värden. ifall vi skickar en lista kommer objektet kolla på listans
+  första värde och skicka resten av listan till en specifik outlet vid
+  en matchning.
+
+Om vi istället vill att synten ska kunna spela flera röster kan vi öka
+antalet röster för =[poly]=. Vill vi t.ex ha fyra röster så skriver vi
+=[poly 4 1]=. Efter det vill vi kunna skicka de olika rösterna till
+olika kopior av vår synt.
+
+För att göra detta behöver vi samla alla outlets från =[poly]= i en
+lista, eftersom vi vill använda det första elementet i listan (voice
+number) för att bestämma vart note number respektive velocity ska
+skickas. Vi kopplar därför in alla tre outlets av =[poly]= in i deras
+respektive inlets i objektet =[pack i i i]=. Vi kopplar därefter
+outleten av =[pack i i i]= till objektet =[route 1 2 3 4]=. =[route]=
+kommer att leta efter listor som börjar med talen =1=, =2=, =3=
+respektive =4= (våra fyra röster) och skicka dessa listor till dessa
+fyra först outlets -- dess sista outlet är för de listor som inte
+matchar.
+
+Vi behöver nu göra kopior av vår synt. Innan vi gör detta måste vi
+ändra en sak i patchen, vilket är att vi vill göra det möjligt att
+skicka en lista som innehåller note number och velocity. Vi gör detta
+med objektet =[unpack i i]=, vars första outlet går till note number
+och andra outlet går till velocity. Efter det markerar vi hela
+synt-delen av patchen (från det =[unpack]=-objekt vi nyss skapade till
+där ljudet multipliceras med vårt envelope) och använder kortkommandot
+=cmd + shift + e= (funktionen Encapsulate) för att spara detta i en
+s.k sub patch. Vi kan sedan döpa denna sub patch om vi vill och göra
+tre kopior av den -- totalt våra fyra röster.
+
+Slutligen koppla vi de första fyra outlets från =[route]= till våra
+fyra röster. Det ska nu gå att spela synten polyfont.
+
+** REAPER
+** MIDI REAPER -> Max
+** BlackHole
+** MIDI Max -> REAPER
