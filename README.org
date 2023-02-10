@@ -1,4 +1,10 @@
 * Projektkurs i ljudkonst och elektroakustisk musik
 ** Max/MSP och REAPER
+Om du har några frågor kan du mejla mig på [[mailto:mattias@mattiashallsten.com][mattias@mattiashallsten.com]].
+
 *** Lektioner
-+ [[./lektioner/01/01-intro-syntes-sampler.org][01 Intro]]
++ [[./lektioner/Lektion 1/01-intro-syntes-sampler.org][Lektion 1]]
++ [[file:lektioner/Lektion 2/02-max-msp-och-reaper.org][Lektion 2]]
+
+
+
