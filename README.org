@@ -4,7 +4,7 @@ Om du har några frågor kan du mejla mig på [[mailto:mattias@mattiashallsten.c
 
 *** Lektioner
 + [[./lektioner/Lektion 1/01-intro-syntes-sampler.org][Lektion 1]]
-+ [[file:lektioner/Lektion 2/02-max-msp-och-reaper.org][Lektion 2]]
++ [[./lektioner/Lektion 2/02-max-msp-och-reaper.org][Lektion 2]]
 
 
 
