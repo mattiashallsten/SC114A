@@ -1,6 +1,7 @@
 * 02 Max MSP och REAPER :toc_4:
   - [[#midi-styrning][MIDI-styrning]]
-  - [[#poly-och-poly][=[poly]= och =[poly~]=]]
+    - [[#problem-med-midi-in][Problem med MIDI in]]
+  - [[#poly-och-poly][poly och poly~]]
   - [[#reaper][REAPER]]
   - [[#midi-reaper---max][MIDI REAPER -> Max]]
   - [[#midi-max---reaper][MIDI Max -> REAPER]]
@@ -8,7 +9,62 @@
 ** MIDI-styrning
 + =[midiin]=
 + =[midiparse]=
-** =[poly]= och =[poly~]=
+
+Om vi vill styra Max med antingen extern hårdvara eller andra
+datorprogram kan vi använda [[https://en.wikipedia.org/wiki/MIDI][MIDI]]. För att få in MIDI-data i Max kan vi
+använda objektet =[midiin]=, där vi kan välja vilken MIDI-enhet vi
+vill lyssna på genom att dubbelklicka på objektet i låst läge.
+
+=[midiin]= skickar ut s.k "rå" MIDI-data, vilket vi måste tolka om för
+att kunna använda i Max. Vi kopplar därför outletten från =[midiin]=
+till objektet =[midiparse]=. =[midiparse]= har flertalet outlets som
+skickar ut olika typer av MIDI-data -- t.ex note on/note off, control
+change, program change, pitch bend. Vi vill åt note on/note off, den
+första outletten i =[midiparse]=.
+
+Det data som kommer ut ur =[midiparse]= är en lista med två element:
+note number och velocity. Note number är den tanget som spelas och
+velocity är hur vårt anslag -- trycker vi hårdare blir det ett högre
+värde och trycker vi svagare blir det ett lägre värde.
+
+För att få ut dessa värden enskild kan vi använda objektet =[unpack]=,
+som har motsatt effekt från =[pack]= -- vi anger vilket data vi vill
+få ut och =[unpack]= delar upp listan åt oss. I detta fall skriver vi
+=[unpack i i]=, för att separera de två heltalen note number och
+velocity from varandra. Vi kan därefter koppla in note number (den
+vänstra outletten av =[unpack]=) in i =[mtof]= och slutligen in i en
+oscillator.
+
+Det andra elementet i listan, som kommer ut ur den högra outletten i
+=[unpack]=, är velocity och är ett heltal mellan 0 och 127. Det
+lättaste sättet att använda det för ett envelop är att göra så att Max
+känner igen alla tal som är 0 och alla tal som inte är 0 (d.v.s alla
+tal /över/ 0). Vi kan sedan konvertera alla tal som är 0 till en bang,
+alla tal som inte är noll till en annan bang, och skicka in dessa två
+olika bangs in i två olika envelope -- ett som går till 0 och ett som
+går till 1. Vi gör detta för enkelhetens skull -- sedan kan vi ställa
+in så att värdet 0 till 127 styr volymen på synten, så att vi kan
+styra volym med vårt anslag.
+
+*** Problem med MIDI in
+Här uppstår dock ett problem -- eftersom vi har en monosynt kommer
+/alla/ velocityvärden som är 0 styra volymen. Om vi t.ex håller ner en
+ton, trycker och håller ner en till ton, och sedan släpper den första
+tonen kommer det göra så att envelopet stängs, även fast vi
+fortfarande håller ner den andra tonen. Detta kan vi lösa genom att
+göra om synten så att den blir polyfon.
+
+** poly och poly~
+Objektet =[poly]= används för att allokera inkommande note on/note
+off-meddelanden till ett givet antal röster. Objektet håller alltså
+koll på vilken ton som hålls ner och vilken ton som lyfts upp, vilket
+vi inte kunde göra tidigare.
+
+Det lättaste sättet att använda =[poly]= nu är att, kanske lite
+motsägelsefullt, använda objektet för att skapa en mono-synt. Om vi
+anger antal röster att vara 1 och sätter på /voice stealing/ för
+=[poly]= kommer objektet sköta allt åt oss.
+
 ** REAPER
 ** MIDI REAPER -> Max
 ** MIDI Max -> REAPER
