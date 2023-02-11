@@ -10,6 +10,8 @@
 + =[kslider]= :: ett virtuellt keyboard
 + =[mtof]= :: konvertera toner uttryckta i midi note number till Hz
   
+-----
+
 Subtraktiv syntes är nog den vanligaste formen av syntes. Jag tror
 också att det är den syntesmetod som är enklast att förstå.
 
