@@ -1,0 +1,155 @@
+#+title: Bygg en sampler
++ =[buffer~]= :: en namngiven plats där en ljudfil kan sparas
++ =[groove~]= :: en sample-uppspelare
++ =[play~]= :: en sample-uppspelare
++ =[waveform~]= :: visualisera innehållet i en =[buffer~]=
++ =[sig~]= :: konvertera ett tal till en signal
+
+I Max/MSP representeras en ljudfil av en =[buffer~]= -- vi kan
+antingen välja att ladda in en existerande ljudfil, eller definera en
+längd för en given =[buffer~]= och spela in ljud dit inuti Max. Ett
+=[buffer~]=-objekt behöver ett godtyckligt namn, vilket anges som dess
+första argument. Detta namn kommer sedan att användas för att hänvisa
+till denna =[buffer~]=.
+
+För att ladda in en ljudfil i en =[buffer~]= skickar vi antingen
+meddelandet =(read)= eller =(replace)= -- skillnaden är att
+=(replace)= återställer alla inställningar för buffern. Anger vi inga
+argument till dessa meddelanden så öppnas ett popup-fönster (Finder
+för MacOS) där vi kan välja en ljudfil. Om vi har sparat vår Max-patch
+någonstans och lägger en ljudfil i samma mapp kan vi ange den filens
+namn som argument till både =(read)= och =(replace)= -- har vi t.ex
+filen =file.wav= kan vi skicka meddelandet =(read file.wav)= till en
+=[buffer~]=.
+
+Genom att dubbelklicka på ett =[buffer~]=-objekt när Max är i låst
+läge öppnas ett fönster som visar vågformen av =[buffer~]=-objektets
+innehåll. På så sätt kan vi säkerställa att ljudfilen laddades in
+korrekt. Om vi vill visa en liknande vågform i själva patchen kan vi
+använda objektet =[waveform~]= -- genom att skicka meddelandet =(set
+<name-of-buffer>)= till ett =[waveform~]=-objekt så visas innehållet
+av den angivna =[buffer~]= i =[wavform~]=-objektet.
+
+* groove~
+Objektet =[groove~]= är ett av de lättaste sätten att spela upp en
+ljudfil i Max/MSP. Objektet förväntar sig en *signal* som avgör dess
+uppspelningshastighet (default är 0, alltså ingen uppspelning alls),
+och skickar man ett heltal hoppar till den positionen i
+buffern. Skickar man t.ex signalen 1 så spelas ljudfilen upp i normal
+hastighet - skickar man 2 dubbel hastighet, 0.5 halva hastigheten
+etc. Skickar man heltalet 0 så hoppar uppspelningen tillbaka till
+början, och skickar man heltalet 500 hoppar uppspelningen till 500 ms
+in i ljudfilen.
+
+=[groove~]= har dessutom en hel del inbyggda funktioner, framförallt
+gällande timestretch. Det går alltså att spela upp en ljudfil och
+styra tonhöjd och uppspelningshastighet separat.
+
+Inlet 2 och 3 är loop start respektive loop end -- det går därför lätt
+att koppla in =[groove~]= i =[waveform]= där man då grafiskt kan
+bestämma vad som ska loopas.
+
++ skapa en buffer
+  + namnge
+  + använd meddelandet =read= för att ladda in en ljudfil
+
++ skapa =[waveform~]=
+  + meddelande =set= för att koppla den till buffern
+
++ skapa =[groove~]=
+
++ koppla till output
+
++ skicka signal 1
+
++ skicka talet 0
+
++ =setmode 1=
+  + patcha ihop med =[waveform~]=
+  + markera en range i buffer
+
++ selection start (ms)
+  + skapa =[i]=-objekt
+  + starta därifrån istället
+
++ visa =loop 1=
+  + demonstrera =$1=
+
++ patcha in selection start/end in i =[groove~]=
+
+* play~
+
+=[play~]= ger användaren lite mer kontroll över
+uppspelningen. Istället för att skicka meddelanden för att starta resp
+stoppa uppspelningen, skickar man en signal som bestämmer en position
+i buffern att spela upp. Skickar man t.ex en ramp från 0 till 1000
+kommer =[play~]= att spela upp buffern från början till 1 sekund in i
+buffern. Detta gör att man kan experimentera men alternativa sätt att
+hitta ett index i buffern: man kan t.ex koppla in en oscillator eller
+slumpgenerator som hoppar till olika positioner.
+
+1. skapa =[play~]=
+2. koppla till output
+3. skicka =[line~]=
+   1. meddelande =(0, 1000 1000)=
+4. koppla in =[cycle~]=
+   1. använd =[scale~]= för att ställa loop points
+5. koppla in andra oscillatorer med =[selector~]=
+* Utveckling av vår sampler
+** Ladda parametrar
++ =[loadbang]= :: skickar en bang när patchen öppnas
++ =[loadmess]= :: skickar ett värde när patchen öppnas
+
+Med dessa två objekt kan vi se till att vissa meddelanden skickas när
+patchen öppnas -- vill vi t.ex säkerställa att en number box har ett
+värdet =500= när patchen öppnas kan vi koppla objektet =[loadmess
+500]= in i number boxen.
+
+** Ladda ljudfil automatiskt
+Vi har tills nu använt meddelandet =(replace)= för att ladda in en
+ljudfil i en =[buffer~]=. När meddelandet skickas så öppnas ett
+Finder-fönster (på MacOS) där vi kan välja ljudfil. Om vi däremot vill
+ladda en specifik ljudfil, utan att behöva välja den manuellt, kan vi
+ange ett filnamn som argument till =(replace)=.
+
+Som exempel har jag ljudfilen =smack.wav= -- skickar vi meddelandet
+=(replace smack.wav)= till =[buffer~]= kommer Max att söka efter filen
+=smack.wav= och om Max hittar den ladda in den i vår
+=[buffer~]=. Kopplar vi objektet =[loadbang]= till detta meddelande så
+kommer meddelandet att skickas till vår =[buffer~]= varje gång patchen
+öppnas, och vi kan vara säkra på att vi laddar vår ljudfil.
+
+*OBS*: För att Max ska hitta ljudfilen är det säkrast att spara
+ljudfilen i samma mapp som vår maxpatch.
+
+** Ladda fler ljudfiler, byt mellan dessa
++ =[sel]= :: skicka ut en bang om ett valt värde skickas till
+  objektets första inlet
+
+[[../../images/sel-object.gif]]
+
+När vi skapar objektet =[groove~]= behöver vi ange ett namn på en
+=[buffer~]= som vi vill att =[groove~]= ska spela upp. Vill vi ändra
+denna buffer kan vi skicka meddelandet =(name <namn-på-buffer>)= till
+=[groove~]=.
+
+Under lektionen skapade vi tre ytterligare buffers. Vi gav dem namnen
+=kick=, =snare= och =hh= och laddade in en sampling av en bastrumma,
+virveltrumma respektive hi-hat. Därefter kan vi skicka meddelandet
+=(name kick)= till =[groove~]= för att spela upp kick-samplingen,
+=(name snare)= för att spela upp virvelsamplingen osv.
+
+Om vi automatiskt vill slumpvis välja mellan dessa samplingar kan vi
+använda objektet =[random 3]= för att generera talen =0=, =1= eller
+=2=. Vi kan sedan koppla in =[random 3]= i =[sel 0 1 2]= för att
+skicka en bang till dess första, andra eller tredje outlet när värdena
+=0=, =1= respektive =2= skapas av =[random 3]=. Om vi sedan koppla
+dessa outlets till meddelandena =(name kick)=, =(name snare)=
+respektive =(name hh)= och kopplar dessa till vår =[groove~]= kommer
+talet =0= göra att =[groove~]= spelar upp vår kicksampling, talet =1=
+göra att =[groove~]= spelar upp vår snaresampling och talet =2= göra
+att vi spelar upp vår hi-hatsampling.
+
+Kopplar vi en =[metro]= till =[random 3]= kommer detta ske
+automatiskt.
+

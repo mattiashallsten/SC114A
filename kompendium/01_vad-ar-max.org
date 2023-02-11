@@ -1,0 +1,106 @@
+#+title: Vad är Max/MSP?
+* Vad är Max/MSP?
+Max/MSP är en programmeringsmiljö för att arbeta med ljud, MIDI och
+video. Första versionen av programmet skapades under andra halvan av
+80-talet av tonsättaren och utvecklaren [[https://en.wikipedia.org/wiki/Miller_Puckette][Miller Puckette]] (programmet
+kallades då "The Patcher") och programmet har sedan 90-talet varit
+tätt kopplat till institutionen [[https://en.wikipedia.org/wiki/IRCAM][IRCAM]] i Paris.
+
+I Max/MSP skapar användaren en "patch" vars syfte kan vara att
+generera och/eller manipulera ljud, data eller video, men programmet
+är väldigt öppet och det går i stort sett att använda som ett
+generellt datorverktyg (liksom andra programmeringsspråk).
+
+Till skillnad från många andra programmeringsspråk/-miljöer är Max/MSP
+grafiskt. I en patch kopplar användaren ihop flertalet objekt med
+virtuella patchkablar, likt en modulärsynt.
+
+* Vad är ett objekt?
+Ett objekt är byggstenarna för en Max/MSP-patch. Jämför man med andra
+programmeringsspråk kan man se dem som förbyggda funktioner (eller
+rena objekt i OOP).
+
+Objekt i Max/MSP har vanligtvis en eller flera ingångar och en eller
+flera utgångar. Ingångarna är alltid ovantill och utgångarna
+nedantill, vilket gör att patchar vanligtvis går nedåt.
+
+För att skapa ett objekt i Max/MSP trycker användaren på "n"-tangenten
+och skriver sedan namnet på objektet. Användaren kan också välja att
+fylla i ett eller flera argument - för "+"-objektet kan användaren
+exempelvis fylla i vilket tal som ska adderas till den vänstra
+ingången.
+
+När vi skapar ett objekt och börjar skriva något så dyker ett
+popup-fönster upp med förslag på vad Max tror att vi vill skriva. I
+detta fall kommer förslaget "+" högst upp, och det är objektet vi vill
+åt. Trycker vi sedan mellanslag så förändras popup-fönstret och visar
+istället objektets argument -- dessa kan man se som objektets
+inställningar. I "+"-objektets fall så kan vi här ange dess initiella
+värde. Vi måste inte ange ett intiellt värde.
+
+Efter att vi har skrivit "+" och ett eventuellt initiellt värde kan vi
+trycka på enter. Vi har då skapat objektet =[+]=.
+
+Från manualen:
+
+#+begin_quote
+Object boxes are the basic logic element of Max – they contain
+functions that perform some sort of task, and operate like miniature
+programs within the larger environment.
+#+end_quote
+
+** Objektet =[+]=
+Jag använder här objektet =[+]= som ett exempel på ett av de mest
+grundläggande objekten i Max/MSP. Detta objekts funktion är att addera
+två tal: det har två st /inlets/ dit vi skickar de två tal som ska
+adderas, och en /outlet/ som skickar ut resultatet av additionen.
+
+Ett objekts inlet(s) är halvcirklarna ovan objektet. Ett objekts
+outlet(s) är halvcirklarna under objektet. Inlets är objektets
+"ingångar" och outlets är objektet "utgångar".
+
+Om vi flyttar muspekaren över antingen en inlet eller en outlet utan
+att klicka på något dyker ett popup-fönster upp som kort beskriver vad
+det givna objektet förväntar sig för data att skickas till dess inlets
+och vad för data som skickas ut från dess outlets. Vi ser också att
+inlets kan vara röda eller gröna: en röd inlet är en s.k /hot/ inlet
+och en blå inlet är en s.k /cold/ inlet. När vi skickar data till en
+cold inlet händer inget förutom att vi s.a.s ändrar inställningarna
+för objektet. Det är först då vi skickar data till en hot inlet som
+objektet faktiskt gör något.
+
+Objektet =[+]=-s vänstra inlet är en hot inlet och dess högra inlet är
+en cold inlet. Det är likadant för nästan alla Max-objekt -- det är
+vanligtvis enbart den inlet längst till vänster som är en hot
+inlet. För detta objekt betyder det att additionen bara genomförs då
+data skickas till dess vänstra inlet -- om vi t.ex skickar ett nummer
+till dess vänstra inlet kommer det numret adderas till det nummer som
+är angett i dess högra inlet och skickas ut ur dess outlet. Om vi
+däremot skickar ett nummer till dess högra inlet kommer additionen
+inte genomföras och det kommer inte skickas ut något nytt data. Vi
+behöver skicka ett nytt värde till dess vänstra inlet, eller en /bang/.
+
+# ** Datatyper i Max/MSP
+# + bang :: en av de viktigaste datatyperna inom Max/MSP. De allra
+#   flesta objekt tolkar en bang genom att genomföra sin
+#   "huvuduppgift" - skickar man bang till en messagebox så skickas
+#   meddelandet; skickar man en bang till ett "f"-objekt skickas talet
+#   som är sparat i objektet.
+# + heltal :: representeras visuellt med ett "number"-objekt.
+# + flyttal :: representeras visuellt med ett "number"-objekt.
+# + symbol :: text i en messagebox
+# + lista :: en samling data, kan representeras i en messagebox
+# + signal :: ljud
+
+* Vad är en bang?
+En bang är en trigger, en händelse som inte inehåller något
+data. Använder vi objektet =[+]= som exempel och ställer ett tal till
+dess högra inlet händer ingenting. Men om vi sedan skickar en bang
+till dess vänstra inlet kommer additionen att genomföras, utan att vi
+behöver ställa något nytt värde. Bang-meddelandet säger bara åt
+=[+]=-objektet att genomföra additionen.
+
+* Ljud i Max/MSP
+Alla objekt som gör ljud i Max/MSP har en tilde-symbol (~) som
+suffix. Till skillnad från andra objekt skickar dessa ut "signaler",
+vilket man ser på att den virtuella patchkabelns är randig.
