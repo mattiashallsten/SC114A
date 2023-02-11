@@ -1,20 +1,6 @@
-* Lektion 2                                                           :toc_4:
-  - [[#utveckling-av-vår-sampler][Utveckling av vår sampler]]
-    - [[#ladda-parametrar][Ladda parametrar]]
-    - [[#ladda-ljudfil-automatiskt][Ladda ljudfil automatiskt]]
-    - [[#ladda-fler-ljudfiler-byt-mellan-dessa][Ladda fler ljudfiler, byt mellan dessa]]
-  - [[#utveckling-av-vår-synt][Utveckling av vår synt]]
-    - [[#midi-styrning][MIDI-styrning]]
-      - [[#problem-med-midi-in][Problem med MIDI in]]
-      - [[#objektet-poly][Objektet poly]]
-    - [[#gör-synten-polyfon][Gör synten polyfon]]
-  - [[#reaper][REAPER]]
-  - [[#midi-reaper---max][MIDI REAPER -> Max]]
-  - [[#blackhole][BlackHole]]
-  - [[#midi-max---reaper][MIDI Max -> REAPER]]
-
-** Utveckling av vår sampler
-*** Ladda parametrar
+#+title: Lektion 2
+* Utveckling av vår sampler
+** Ladda parametrar
 + =[loadbang]= :: skickar en bang när patchen öppnas
 + =[loadmess]= :: skickar ett värde när patchen öppnas
 
@@ -23,7 +9,7 @@ patchen öppnas -- vill vi t.ex säkerställa att en number box har ett
 värdet =500= när patchen öppnas kan vi koppla objektet =[loadmess
 500]= in i number boxen.
 
-*** Ladda ljudfil automatiskt
+** Ladda ljudfil automatiskt
 Vi har tills nu använt meddelandet =(replace)= för att ladda in en
 ljudfil i en =[buffer~]=. När meddelandet skickas så öppnas ett
 Finder-fönster (på MacOS) där vi kan välja ljudfil. Om vi däremot vill
@@ -40,9 +26,11 @@ kommer meddelandet att skickas till vår =[buffer~]= varje gång patchen
 *OBS*: För att Max ska hitta ljudfilen är det säkrast att spara
 ljudfilen i samma mapp som vår maxpatch.
 
-*** Ladda fler ljudfiler, byt mellan dessa
+** Ladda fler ljudfiler, byt mellan dessa
 + =[sel]= :: skicka ut en bang om ett valt värde skickas till
   objektets första inlet
+
+[[../../images/sel-object.gif]]
 
 När vi skapar objektet =[groove~]= behöver vi ange ett namn på en
 =[buffer~]= som vi vill att =[groove~]= ska spela upp. Vill vi ändra
@@ -69,8 +57,8 @@ att vi spelar upp vår hi-hatsampling.
 Kopplar vi en =[metro]= till =[random 3]= kommer detta ske
 automatiskt.
 
-** Utveckling av vår synt
-*** MIDI-styrning
+* Utveckling av vår synt
+** MIDI-styrning
 + =[midiin]= :: få in rå MIDI-data
 + =[midiparse]= :: tolka det råa MIDI-datat och ge användaren tillgång
   till note on/note off, control change, etc.
@@ -125,7 +113,7 @@ ställa parameterna =attack=, =decay=, =sustain= och =release=.
 Vi har nu en synt som spelar den ton som vi spelar på vårt MIDI
 keyboard, och slutar spela när vi släpper tangenten.
 
-**** Problem med MIDI in
+*** Problem med MIDI in
 Här uppstår dock ett problem -- eftersom vi har en monosynt kommer
 /alla/ velocityvärden som är 0 styra volymen. Om vi t.ex håller ner en
 ton, trycker och håller ner en till ton, och sedan släpper den första
@@ -133,7 +121,7 @@ tonen kommer det göra så att envelopet stängs, även fast vi
 fortfarande håller ner den andra tonen. Detta kan vi lösa genom att
 göra om synten så att den blir polyfon.
 
-**** Objektet poly
+*** Objektet poly
 Objektet =[poly]= används för att allokera inkommande note on/note
 off-meddelanden till ett givet antal röster. Objektet håller alltså
 koll på vilken ton som hålls ner och vilken ton som lyfts upp, vilket
@@ -158,7 +146,7 @@ respektive velocity, vilket vi helt enkelt kopplar direkt till
 Det går nu att spela vår synt legato, utan att riskera att den stängs
 av när vi inte vill.
 
-*** Gör synten polyfon
+** Gör synten polyfon
 + =[route]= :: skicka olika tal till olika outlet beroende på dess
   värden. ifall vi skickar en lista kommer objektet kolla på listans
   första värde och skicka resten av listan till en specifik outlet vid
@@ -194,7 +182,7 @@ tre kopior av den -- totalt våra fyra röster.
 Slutligen koppla vi de första fyra outlets från =[route]= till våra
 fyra röster. Det ska nu gå att spela synten polyfont.
 
-** REAPER
-** MIDI REAPER -> Max
-** BlackHole
-** MIDI Max -> REAPER
+* REAPER
+* MIDI REAPER -> Max
+* BlackHole
+* MIDI Max -> REAPER
