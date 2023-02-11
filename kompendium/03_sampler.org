@@ -1,4 +1,5 @@
 #+title: Bygg en sampler
+*Objekt som kommer att användas:*
 + =[buffer~]= :: en namngiven plats där en ljudfil kan sparas
 + =[groove~]= :: en sample-uppspelare
 + =[play~]= :: en sample-uppspelare

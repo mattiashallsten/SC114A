@@ -1,4 +1,5 @@
 #+title: Bygg en subtraktiv synt
+*Objekt som kommer att användas:*
 + =[saw~]= :: genererar en sågtandsvåg
 + =[cycle~]= :: genererar en sinuston
 + =[lores~]= :: ett resonant lågpassfilter
@@ -11,6 +12,8 @@
   
 Subtraktiv syntes är nog den vanligaste formen av syntes. Jag tror
 också att det är den syntesmetod som är enklast att förstå.
+
+[[../images/subtractive-synth.png]]
 
 Subtraktiv syntes går ut på att man har en ljudkälla med rik
 klangfärg. Det lättaste sättet att uppnå detta är med en sågtandsvåg,
