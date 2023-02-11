@@ -30,6 +30,7 @@ ljudfilen i samma mapp som vår maxpatch.
 + =[sel]= :: skicka ut en bang om ett valt värde skickas till
   objektets första inlet
 
+#+caption: Då detta sel-objekt får talen 0, 1 eller 2 skickas en bang ur dess första, andra respektive tredje outlet.
 [[../../images/sel-object.gif]]
 
 När vi skapar objektet =[groove~]= behöver vi ange ett namn på en
