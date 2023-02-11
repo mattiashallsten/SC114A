@@ -1,5 +1,4 @@
 #+title: Bygg en subtraktiv synt
-* Bygg en subtraktiv synt
 + =[saw~]= :: genererar en sågtandsvåg
 + =[cycle~]= :: genererar en sinuston
 + =[lores~]= :: ett resonant lågpassfilter

@@ -1,5 +1,4 @@
 #+title: Vad är Max/MSP?
-* Vad är Max/MSP?
 Max/MSP är en programmeringsmiljö för att arbeta med ljud, MIDI och
 video. Första versionen av programmet skapades under andra halvan av
 80-talet av tonsättaren och utvecklaren [[https://en.wikipedia.org/wiki/Miller_Puckette][Miller Puckette]] (programmet
