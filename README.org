@@ -4,12 +4,15 @@ Texten i dessa dokument är formatterad så att alla objekt omges av
 hakparanteser, ex =[metro]=, och alla meddelanden omges av vanliga
 paranteser, ex =(set 5)=.
 
-Nedan finner du en lista med länkar till dokumenten för varje
-lektion. Om du vill ladda ner hela detta arkiv kan du klicka på den
-gröna knappen där det står "Code". Då öppnas en menu där du kan klicka
-på knappen "Download ZIP".
+Nedan finner du en lista med länkar till kompendium för de olika
+patcharna vi har arbetat med under kursen. Vill du testa
+exempel-patcharna så finns de i mappen "exempel" -- för att testa dem
+måste du ladda ner hela detta arkiv. Detta gör du genom att klicka på
+den gröna knappen där det står "Code". Då öppnas en menu där du kan
+klicka på knappen "Download ZIP".
 
 Om du har några frågor kan du mejla mig på [[mailto:mattias@mattiashallsten.com][mattias@mattiashallsten.com]].
+
 *** Innehåll
 1. [[./kompendium/01_vad-ar-max.org][Vad är Max/MSP?]]
 2. [[./kompendium/02_subtraktiv-synt.org][Bygg en subtraktiv synt]]
