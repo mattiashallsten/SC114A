@@ -1,6 +1,0 @@
-#+title: Lektion 2
-* Utveckling av vår synt
-* REAPER
-* MIDI REAPER -> Max
-* BlackHole
-* MIDI Max -> REAPER

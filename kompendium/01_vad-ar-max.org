@@ -103,3 +103,23 @@ behöver ställa något nytt värde. Bang-meddelandet säger bara åt
 Alla objekt som gör ljud i Max/MSP har en tilde-symbol (~) som
 suffix. Till skillnad från andra objekt skickar dessa ut "signaler",
 vilket man ser på att den virtuella patchkabelns är randig.
+
+* Max/MSP's interface
+Efter att användaren har öppnat programmet Max kan den skapa en ny
+patch genom att gå till File -> New patcher, eller enkelt använda
+kortkommandot =cmd + n= på MacOS (liksom de allra flesta program).
+
+På denna sida i Max-manualen finns information om hur man som
+användare navigerar gränssnittet:
+
++ [[https://docs.cycling74.com/max8/vignettes/max_environment_topic][The Max Environment]]
+
+* Användbara kortkommandon
++ =cmd + e= :: lås/lås upp patchern
++ =n= :: (i olåst läge) skapa ett nytt objekt
++ =c= :: (i olåst läge) skapa en ny kommentar
++ =m= :: (i olåst läge) skapa en ny message box
++ =i= :: (i olåst läge) skapa en ny number box som visar heltal
++ =f= :: (i olåst läge) skapa en ny number box som visar decimaltal
++ =cmd + shift + e= :: encapsulate: konvertera den markerade delen av
+  patchen till en ny sub patch
