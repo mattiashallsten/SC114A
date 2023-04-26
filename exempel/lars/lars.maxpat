@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 237.0, 124.0, 1049.0, 848.0 ],
+		"rect" : [ 38.0, 104.0, 1436.0, 840.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -39,6 +39,33 @@
 		"subpatcher_template" : "",
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
+				"box" : 				{
+					"bubble" : 1,
+					"id" : "obj-7",
+					"linecount" : 3,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 608.50001859664917, 275.783196806907654, 80.0, 51.0 ],
+					"presentation_linecount" : 3,
+					"text" : "trigger random sound"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontsize" : 20.0,
+					"id" : "obj-6",
+					"linecount" : 11,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 850.0, 190.923104286193848, 393.0, 252.0 ],
+					"text" : "- ställ \"sens on\" så att toggle-objektet under \"p analyzer\" slås på när du gör ljud\n\n- ställ \"sens off\" så att samma toggle slås av när du slutar göra ljud\n\n- tryck på \"trigger random sound\" för att... ja du förstår\n\n(en grej att prova är att koppla ett metro-objekt till \"trigger random sound\")"
+				}
+
+			}
+, 			{
 				"box" : 				{
 					"id" : "obj-1",
 					"maxclass" : "newobj",
@@ -347,7 +374,7 @@
 						}
 ,
 						"classnamespace" : "box",
-						"rect" : [ 630.0, 311.0, 1044.0, 669.0 ],
+						"rect" : [ 792.0, 104.0, 682.0, 370.0 ],
 						"bglocked" : 0,
 						"openinpresentation" : 0,
 						"default_fontsize" : 12.0,
@@ -375,7 +402,6 @@
 						"style" : "",
 						"subpatcher_template" : "",
 						"assistshowspatchername" : 0,
-						"visible" : 1,
 						"boxes" : [ 							{
 								"box" : 								{
 									"id" : "obj-77",
@@ -781,7 +807,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 0,
 					"patching_rect" : [ 600.000017881393433, 869.699146926403046, 55.0, 22.0 ],
-					"text" : "dac~ 1 4"
+					"text" : "dac~ 1 2"
 				}
 
 			}
